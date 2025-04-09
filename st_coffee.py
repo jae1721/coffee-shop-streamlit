@@ -11,14 +11,15 @@ category_encoder = joblib.load('./model/category_encoder.pkl')
 
 # 페이지 설정
 st.set_page_config(page_title='커피숍 일일 매출 예측기', page_icon=':coffee:', layout='wide')
-
 # 사이드바 메뉴
-menu = st.sidebar.selectbox("메뉴 선택", ["매출 예측", "전략 수립"])
+st.sidebar.title("Menu")
+st.sidebar.image("https://cdn-icons-png.flaticon.com/512/925/925022.png", width=80)
+menu = st.sidebar.selectbox("", ["💵매출 예측", "💭전략 수립"])
 
 # ------------------------------
 # 매출 예측 탭
 # ------------------------------
-if menu == '매출 예측':
+if menu == '💵매출 예측':
     st.title('☕ 커피숍 일일 매출 예측기')
     st.write("입력값을 바탕으로 오늘의 예상 매출을 예측합니다.")
 
@@ -38,9 +39,9 @@ if menu == '매출 예측':
 # ------------------------------
 # 전략 수립 탭
 # ------------------------------
-elif menu == '전략 수립':
+elif menu == '💭전략 수립':
     st.title("💡 전략 수립 도우미")
-    st.write("매출을 입력하면 고객 세그먼트를 분류하고 타겟 특성과 전략을 제시합니다.")
+    st.write("매출을 입력하면 알맞은 고객 세그먼트를 분류하고 타겟 특성과 전략을 제시합니다.")
 
     def scale_to_100(x, original_min=305.1, original_max=4675.86):
         return (x - original_min) / (original_max - original_min) * 100
@@ -67,15 +68,24 @@ elif menu == '전략 수립':
         - **평균 소비 점수**: {profile['spending_score']:.1f}  
         - **멤버십 가입 기간**: {profile['membership_years']:.1f}년  
         - **주요 성별**: {gender_str}  
-        - **선호 카테고리**: {category_str}
+        - **관심 품목**: {category_str}
         """)
 
         st.subheader("📌 추천 마케팅 전략")
         if pred_segment == '가격 민감형 소비집단':
-            st.markdown("- **할인 메뉴** 및 **SNS 이벤트**로 관심 유도")
+            st.markdown("""
+            - **할인 메뉴** 및 **SNS 이벤트**로 관심 유도
+            - 관심 품목인 **전자제품** 관련 이벤트 진행\n
+                ex) 맥세이프 카드지갑 등 악세서리""")
         elif pred_segment == '일반 소비집단':
-            st.markdown("- **포인트 적립** 및 **재방문 쿠폰** 제공")
+            st.markdown("""
+            - **포인트 적립** 및 **재방문 쿠폰** 제공
+            - 관심 품목인 **스포츠**와 콜라보 진행으로 적극적 소비 유도\n
+                ex) KBO 굿즈 등""")
         elif pred_segment == '고소비집단':
-            st.markdown("- **프리미엄 상품 구성** 및 **고급 인테리어** 강조")
+            st.markdown("""
+            - **프리미엄 상품 구성** 및 **고급 인테리어** 강조
+            - 관심 품목인 **스포츠**와 콜라보 진행\n
+                ex) KBO 굿즈 등""")
         else:
             st.markdown("- **VIP 라운지** 및 **맞춤형 혜택** 제공")
